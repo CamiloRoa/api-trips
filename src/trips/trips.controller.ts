@@ -1,5 +1,5 @@
-import { Controller, Post, Body, Query, ParseIntPipe } from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
+import { Controller, Post, Body, Query, ParseIntPipe, UseGuards } from '@nestjs/common';
+import { ApiTags, ApiBearerAuth } from '@nestjs/swagger';
 
 import { TripsService } from './trips.service';
 import { CreateTripDto } from './dto/trip.dto';
@@ -8,8 +8,12 @@ import { MongoIdPipe } from '../common/mongo-id.pipe';
 
 import { UsersService } from '../users/users.service';
 
+import { JwtAuthGuard } from '../auth/jwt.auth.guard';
+
 @ApiTags('trips')
+@UseGuards(JwtAuthGuard)
 @Controller('trips')
+@ApiBearerAuth()
 export class TripsController {
   constructor(
     private readonly tripsService: TripsService,

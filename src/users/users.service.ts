@@ -8,11 +8,11 @@ import { User } from './interfaces/user.interface';
 
 import { UserRepository } from '../repository/user.repository';
 
-//import { JwtService } from '@nestjs/jwt';
+import { JwtService } from '@nestjs/jwt';
 @Injectable()
 export class UsersService {
   constructor(
-    private userRepository: UserRepository, //private jwtService: JwtService,
+    private userRepository: UserRepository, private jwtService: JwtService,
   ) {}
 
   create(createUser: User) {
@@ -37,13 +37,14 @@ export class UsersService {
   async auth(email: string, password: string) {
     const user = await this.userRepository.auth(email, password);
     if (!user) throw new UnauthorizedException('User invalid');
+    return await this.generateJWT(user)
   }
 
-  // async generateJWT(user: User) {
-  //   const payload = { sub: user._id };
-  //   return {
-  //     access_token: this.jwtService.sign(payload),
-  //     user,
-  //   };
-  // }
+  async generateJWT(user) {
+    const payload = { sub: user._id };
+    return {
+      access_token: this.jwtService.sign(payload),
+      user,
+    };
+  }
 }

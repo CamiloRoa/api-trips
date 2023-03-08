@@ -26,7 +26,7 @@ async function bootstrap() {
   }
 
   if (swagger.enabled) {
-    const config = new DocumentBuilder()
+    const config = new DocumentBuilder().addBearerAuth()
       .setTitle(`${project.name}`)
       .setVersion(`${project.version}`)
       .setDescription(`Swagger - ${project.description}`)
